@@ -8,7 +8,6 @@ struct Node
 {
 	Node* next;
 	int data;
-	bool empty = true;
 };
 
 typedef Node* PNode;
@@ -27,38 +26,19 @@ class Hash{
 		PNode find(int);
 };
 
-PNode Hash::find(int key)
-{
-	Node* p;
-	p = Hash_Table[Hash_func(key)];
-	while (p && !(p->data == key))
-	{
-		p = p->next;
-	}
-	return p;
-}
-
 int Hash::Hash_func(int key){
 	return (key % size);
 }
 
 void Hash::insert_elem(int num)
 {
-	PNode p;
+	PNode p, p0;
 	int h = Hash_func(num);
-	p = Hash_Table[h];
-	while(p && !p->empty)
-	{
-		p = p->next;
-	}
-	if (p->empty)
-	{
+	p = new Node;
+	p0 = Hash_Table[h];
+	Hash_Table[h] = p;
+	p->next = p0;
 	p->data = num;
-	p->empty = false;
-	}
-	else{
-		cout << endl << endl << "Hash table is overloaded.";
-	}
 }
 
 void Hash::generate_data(int count){
@@ -109,6 +89,17 @@ void Hash::create_Hash_Table()
 	cin >> count_of_el;
 	generate_data(count_of_el);
 	output_HT();
+}
+
+PNode Hash::find(int key)
+{
+	Node* p;
+	p = Hash_Table[Hash_func(key)];
+	while (p && !(p->data == key))
+	{
+		p = p->next;
+	}
+	return p;
 }
 
 int main(){
